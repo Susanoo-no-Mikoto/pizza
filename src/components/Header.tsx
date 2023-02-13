@@ -1,8 +1,16 @@
+import { FC } from 'react';
 import { Link } from 'react-router-dom';
+
+import Search from '../components/Search';
 
 import logoSvg from '../assets/img/pizza-logo.svg';
 
-const Header = () => {
+interface IHeaderProps {
+  searshValue: string;
+  setSearshValue: (value: string) => void;
+}
+
+const Header: FC<IHeaderProps> = ({ searshValue, setSearshValue }) => {
   return (
     <div className="header">
       <div className="container">
@@ -15,6 +23,7 @@ const Header = () => {
             </div>
           </div>
         </Link>
+        <Search searshValue={searshValue} setSearshValue={setSearshValue} />
         <div className="header__cart">
           <Link to="/cart" className="button button--cart">
             <span>520 ₽</span>
