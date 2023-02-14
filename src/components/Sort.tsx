@@ -1,21 +1,30 @@
-import React, { FC } from 'react';
+import { FC, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
-interface ISortProps {
-  sort: { name: string; sortProperty: string };
-  onChangeSort: (obj: { name: string; sortProperty: string }) => void;
-}
+//ReduxSlices
+import { setSort } from '../redux/slices/filterSlice';
 
-const Sort: FC<ISortProps> = ({ sort, onChangeSort }) => {
-  const [open, setOpen] = React.useState<boolean>(false);
+//Types
+import { RootState } from '../redux/store';
 
-  const list = [
-    { name: 'популярности ↓', sortProperty: 'rating' },
-    { name: 'популярности ↑', sortProperty: '-rating' },
-    { name: 'цене ↑', sortProperty: 'price' },
-    { name: 'цене ↓', sortProperty: '-price' },
-    { name: 'алфавиту ↑', sortProperty: 'title' },
-    { name: 'алфавиту ↓', sortProperty: '-title' },
-  ];
+const list = [
+  { name: 'популярности ↓', sortProperty: 'rating' },
+  { name: 'популярности ↑', sortProperty: '-rating' },
+  { name: 'цене ↑', sortProperty: 'price' },
+  { name: 'цене ↓', sortProperty: '-price' },
+  { name: 'алфавиту ↑', sortProperty: 'title' },
+  { name: 'алфавиту ↓', sortProperty: '-title' },
+];
+
+const Sort: FC = () => {
+  const sort = useSelector((state: RootState) => state.filter.sort);
+  const dispatch = useDispatch();
+
+  const [open, setOpen] = useState<boolean>(false);
+
+  const onChangeSort = (obj: object) => {
+    dispatch(setSort(obj));
+  };
 
   return (
     <div className="sort">

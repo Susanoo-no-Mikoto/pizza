@@ -1,12 +1,26 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+
+//ReduxSlices
+import { setCategoryId } from '../redux/slices/filterSlice';
+
+//Types
+import { RootState } from '../redux/store';
 
 interface ICategoriesProps {
   value: number;
   onChangeCategory: (i: number) => void;
 }
 
-const Categories: FC<ICategoriesProps> = ({ value, onChangeCategory }) => {
+const Categories: FC = () => {
   const categories = ['Все', 'Мясные', 'Вегетарианские', 'Гриль', 'Острые', 'Закрытые'];
+
+  const dispatch = useDispatch();
+  const categoryId = useSelector((state: RootState) => state.filter.categoryId);
+
+  const onChangeCategory = (id: number) => {
+    dispatch(setCategoryId(id));
+  };
 
   return (
     <div className="categories">
@@ -15,7 +29,7 @@ const Categories: FC<ICategoriesProps> = ({ value, onChangeCategory }) => {
           <li
             key={category}
             onClick={() => onChangeCategory(i)}
-            className={value === i ? 'active' : ' '}>
+            className={categoryId === i ? 'active' : ' '}>
             {category}
           </li>
         ))}

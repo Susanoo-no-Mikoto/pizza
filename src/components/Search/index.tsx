@@ -1,4 +1,6 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
+
+import { SearchContext } from '../../App';
 
 import styles from './Search.module.scss';
 
@@ -7,7 +9,9 @@ interface ISearhProps {
   setSearshValue: (value: string) => void;
 }
 
-const Search: FC<ISearhProps> = ({ searshValue, setSearshValue }) => {
+const Search: FC = () => {
+  const { searshValue, setSearshValue } = useContext(SearchContext);
+
   return (
     <div className={styles.root}>
       <svg

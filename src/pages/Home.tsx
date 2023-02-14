@@ -1,6 +1,11 @@
 import { FC, useState, useEffect } from 'react';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
+//Types
+import { RootState } from '../redux/store';
+
+//Components
 import Categories from '../components/Categories';
 import Sort from '../components/Sort';
 import Search from '../components/Search';
@@ -24,11 +29,11 @@ interface IHomeProps {
 }
 
 const Home: FC<IHomeProps> = ({ searshValue }) => {
+  const { categoryId, sort } = useSelector((state: RootState) => state.filter);
+
   const [items, setItems] = useState<IItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [categoryId, setCategoryId] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [sort, setSort] = useState({ name: 'популярности ↓', sortProperty: 'rating' });
 
   useEffect(() => {
     setIsLoading(true);
@@ -63,8 +68,8 @@ const Home: FC<IHomeProps> = ({ searshValue }) => {
   return (
     <div className="container">
       <div className="content__top">
-        <Categories value={categoryId} onChangeCategory={(i) => setCategoryId(i)} />
-        <Sort sort={sort} onChangeSort={(obj) => setSort(obj)} />
+        <Categories />
+        <Sort />
       </div>
       <div className="title__search__wrapper">
         <h2 className="content__title">Все пиццы</h2>

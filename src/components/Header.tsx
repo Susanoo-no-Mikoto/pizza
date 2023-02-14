@@ -10,7 +10,7 @@ interface IHeaderProps {
   setSearshValue: (value: string) => void;
 }
 
-const Header: FC<IHeaderProps> = ({ searshValue, setSearshValue }) => {
+const Header: FC = () => {
   return (
     <div className="header">
       <div className="container">
@@ -23,7 +23,7 @@ const Header: FC<IHeaderProps> = ({ searshValue, setSearshValue }) => {
             </div>
           </div>
         </Link>
-        <Search searshValue={searshValue} setSearshValue={setSearshValue} />
+        <Search />
         <div className="header__cart">
           <Link to="/cart" className="button button--cart">
             <span>520 ₽</span>
