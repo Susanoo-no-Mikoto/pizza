@@ -1,4 +1,5 @@
-import { FC, useContext } from 'react';
+import { FC, useCallback, useContext, useRef, useState } from 'react';
+import debounce from 'lodash.debounce';
 
 import { SearchContext } from '../../App';
 
@@ -10,7 +11,27 @@ interface ISearhProps {
 }
 
 const Search: FC = () => {
-  const { searshValue, setSearshValue } = useContext(SearchContext);
+  const { setSearshValue } = useContext(SearchContext);
+  const [value, setValue] = useState<string>('');
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const onClickClear = () => {
+    setSearshValue('');
+    setValue('');
+    inputRef.current?.focus();
+  };
+
+  const updateSearchValue = useCallback(
+    debounce((str) => {
+      setSearshValue(str);
+    }, 500),
+    [],
+  );
+
+  const onChangeInput = (event: { target: HTMLInputElement }) => {
+    setValue(event.target.value);
+    updateSearchValue(event.target.value);
+  };
 
   return (
     <div className={styles.root}>
@@ -34,16 +55,15 @@ const Search: FC = () => {
         </g>
       </svg>
       <input
-        value={searshValue}
-        onChange={(event) => setSearshValue(event.target.value)}
+        ref={inputRef}
+        value={value}
+        onChange={onChangeInput}
         className={styles.input}
         placeholder="Поиск пиццы..."
       />
-      {searshValue && (
+      {value && (
         <svg
-          onClick={(event) => {
-            setSearshValue('');
-          }}
+          onClick={onClickClear}
           className={styles.icon__close}
           xmlns="http://www.w3.org/2000/svg"
           data-name="Livello 1"

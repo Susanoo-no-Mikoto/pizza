@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 //ReduxSlices
@@ -7,7 +7,7 @@ import { setSort } from '../redux/slices/filterSlice';
 //Types
 import { RootState } from '../redux/store';
 
-const list = [
+export const list = [
   { name: 'популярности ↓', sortProperty: 'rating' },
   { name: 'популярности ↑', sortProperty: '-rating' },
   { name: 'цене ↑', sortProperty: 'price' },
@@ -17,8 +17,9 @@ const list = [
 ];
 
 const Sort: FC = () => {
-  const sort = useSelector((state: RootState) => state.filter.sort);
   const dispatch = useDispatch();
+  const sort = useSelector((state: RootState) => state.filter.sort);
+  const sortRef = useRef<HTMLDivElement>(null);
 
   const [open, setOpen] = useState<boolean>(false);
 
@@ -26,8 +27,21 @@ const Sort: FC = () => {
     dispatch(setSort(obj));
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (sortRef.current && !event.composedPath().includes(sortRef.current)) {
+        setOpen(false);
+      }
+    };
+    document.body.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.body.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="sort">
+    <div ref={sortRef} className="sort">
       <div className="sort__label">
         <svg
           width="10"

@@ -1,13 +1,18 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import qs from 'qs';
+import { useNavigate } from 'react-router-dom';
+
+//ReduxSlices
+import { setCurrentPage, setFilters } from '../redux/slices/filterSlice';
 
 //Types
 import { RootState } from '../redux/store';
 
 //Components
 import Categories from '../components/Categories';
-import Sort from '../components/Sort';
+import Sort, { list } from '../components/Sort';
 import Search from '../components/Search';
 import PizzaBlock from '../components/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
@@ -29,14 +34,23 @@ interface IHomeProps {
 }
 
 const Home: FC<IHomeProps> = ({ searshValue }) => {
-  const { categoryId, sort } = useSelector((state: RootState) => state.filter);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { categoryId, sort, currentPage } = useSelector((state: RootState) => state.filter);
+  const isSearch = useRef<boolean>(false);
+  const isMounted = useRef<boolean>(false);
 
   const [items, setItems] = useState<IItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  // const [currentPage, setCurrentPage] = useState<number>(1);
 
-  useEffect(() => {
+  const onChangePage = (numPage: number) => {
+    dispatch(setCurrentPage(numPage));
+  };
+
+  const fetchPizzas = () => {
     setIsLoading(true);
+
     const category = categoryId > 0 ? `category=${categoryId}` : '';
     const sortBy = sort.sortProperty.replace('-', '');
     const order = sort.sortProperty.includes('-') ? 'desc' : 'asc';
@@ -44,20 +58,53 @@ const Home: FC<IHomeProps> = ({ searshValue }) => {
 
     (async () => {
       try {
-        const [itemsResponse] = await Promise.all([
-          axios.get<IItem[]>(
+        // const [itemsResponse] = await Promise.all([
+        // ]);
+        await axios
+          .get<IItem[]>(
             `http://localhost:3001/items?_page=${currentPage}&_limit=8&${category}&_sort=${sortBy}&_order=${order}${search}`,
-          ),
-        ]);
-
-        setItems(itemsResponse.data);
-        setIsLoading(false);
+          )
+          .then((res) => {
+            setItems(res.data);
+            setIsLoading(false);
+          });
       } catch (error) {
         alert('Ошибка загрузки данных');
         console.log(error);
       }
     })();
+  };
+
+  // Если изменили параметры и был первый рендер
+  useEffect(() => {
+    if (isMounted.current) {
+      const queryString = qs.stringify({
+        sortProperty: sort.sortProperty,
+        categoryId,
+        currentPage,
+      });
+      navigate(`?${queryString}`);
+    }
+    isMounted.current = true;
+  }, [categoryId, sort, currentPage]);
+
+  // Если был первый рендер, то проверяем URl-параметры и сохраняем в redux
+  useEffect(() => {
+    if (window.location.search) {
+      const params = qs.parse(window.location.search.substring(1));
+      const sort = list.find((obj) => obj.sortProperty === params.sortProperty);
+      dispatch(setFilters({ ...params, sort }));
+      isSearch.current = true;
+    }
+  }, []);
+
+  // Если был первый рендер, то запрашиваем пиццы
+  useEffect(() => {
     window.scrollTo(0, 0);
+    if (!isSearch.current) {
+      fetchPizzas();
+    }
+    isSearch.current = false;
   }, [categoryId, sort, searshValue, currentPage]);
 
   const pizzas = items
@@ -77,7 +124,7 @@ const Home: FC<IHomeProps> = ({ searshValue }) => {
       </div>
 
       <div className="content__items">{isLoading ? skeletons : pizzas}</div>
-      <Pagination onPageChange={(numPage: number) => setCurrentPage(numPage)} />
+      <Pagination currentPage={currentPage} onChangePage={onChangePage} />
     </div>
   );
 };
