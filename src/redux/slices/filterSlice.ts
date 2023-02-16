@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-export interface FilterState {
+export interface IFilterState {
   searchValue: string;
   categoryId: number;
   currentPage: number;
@@ -9,7 +9,7 @@ export interface FilterState {
   };
 }
 
-const initialState: FilterState = {
+const initialState: IFilterState = {
   searchValue: '',
   categoryId: 0,
   currentPage: 1,

@@ -7,9 +7,6 @@ import { useNavigate } from 'react-router-dom';
 //ReduxSlices
 import { setCurrentPage, setFilters } from '../redux/slices/filterSlice';
 
-//Types
-import { RootState } from '../redux/store';
-
 //Components
 import Categories from '../components/Categories';
 import Sort, { list } from '../components/Sort';
@@ -17,6 +14,9 @@ import Search from '../components/Search';
 import PizzaBlock from '../components/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import Pagination from '../components/Pagination';
+
+//Types
+import { RootState } from '../redux/store';
 
 export interface IItem {
   id: number;
