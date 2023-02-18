@@ -2,17 +2,23 @@ import { FC, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 //ReduxSlices
-import { addPizza } from '../../redux/slices/cartSlice';
+import { addPizza, cartItemsByIdSelector } from '../../redux/slices/cartSlice';
 
-//Types
-import { IItem } from '../../pages/Home';
-import { RootState } from '../../redux/store';
+interface IPizzaBlockProps {
+  id: number;
+  title: string;
+  imageUrl: string;
+  price: number;
+  category: number;
+  types: number[];
+  sizes: number[];
+  rating: number;
+}
 
-const PizzaBlock: FC<IItem> = ({ id, title, imageUrl, price, types, sizes }) => {
+const PizzaBlock: FC<IPizzaBlockProps> = ({ id, title, imageUrl, price, types, sizes }) => {
   const dispatch = useDispatch();
-  const cartItems = useSelector((state: RootState) =>
-    state.cart.items.find((item) => item.id === id),
-  );
+  const cartItems = useSelector(cartItemsByIdSelector(id));
+
   const [activeType, setActiveType] = useState<number>(0);
   const [acticeSize, setActiceSize] = useState<number>(0);
 

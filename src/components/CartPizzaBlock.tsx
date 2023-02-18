@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useDispatch } from 'react-redux';
 
 //ReduxSlices
-import { addPizza, ICartState, minusPizza, removePizza } from '../redux/slices/cartSlice';
+import { addPizza, minusPizza, removePizza } from '../redux/slices/cartSlice';
 
 interface ICartPizzaBlockProps {
   id: number;

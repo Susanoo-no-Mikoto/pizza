@@ -1,11 +1,8 @@
-import { FC, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 //ReduxSlices
-import { setSort } from '../redux/slices/filterSlice';
-
-//Types
-import { RootState } from '../redux/store';
+import { filterSelector, setSort } from '../redux/slices/filterSlice';
 
 export const list = [
   { name: 'популярности ↓', sortProperty: 'rating' },
@@ -16,9 +13,9 @@ export const list = [
   { name: 'алфавиту ↓', sortProperty: '-title' },
 ];
 
-const Sort: FC = () => {
+const Sort = () => {
   const dispatch = useDispatch();
-  const sort = useSelector((state: RootState) => state.filter.sort);
+  const { sort } = useSelector(filterSelector);
   const sortRef = useRef<HTMLDivElement>(null);
 
   const [open, setOpen] = useState<boolean>(false);

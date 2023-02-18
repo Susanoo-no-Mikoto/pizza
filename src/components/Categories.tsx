@@ -1,22 +1,13 @@
-import { FC } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 //ReduxSlices
-import { setCategoryId } from '../redux/slices/filterSlice';
+import { filterSelector, setCategoryId } from '../redux/slices/filterSlice';
 
-//Types
-import { RootState } from '../redux/store';
-
-interface ICategoriesProps {
-  value: number;
-  onChangeCategory: (i: number) => void;
-}
-
-const Categories: FC = () => {
+const Categories = () => {
   const categories = ['Все', 'Мясные', 'Вегетарианские', 'Гриль', 'Острые', 'Закрытые'];
 
   const dispatch = useDispatch();
-  const categoryId = useSelector((state: RootState) => state.filter.categoryId);
+  const { categoryId } = useSelector(filterSelector);
 
   const onChangeCategory = (id: number) => {
     dispatch(setCategoryId(id));

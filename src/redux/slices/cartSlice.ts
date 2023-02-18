@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { RootState } from '../store';
 
 export interface ICartState {
   items: {
@@ -22,12 +23,6 @@ export const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    // addPizza(state, action) {
-    //   state.items.push(action.payload);
-    //   state.totalPrice = state.items.reduce((sum, item) => {
-    //     return item.price + sum;
-    //   }, 0);
-    // },
     addPizza(state, action) {
       const findPizza = state.items.find((item) => item.id === action.payload.id);
       if (findPizza) {
@@ -54,6 +49,10 @@ export const cartSlice = createSlice({
     },
   },
 });
+
+export const cartSelector = (state: RootState) => state.cart;
+export const cartItemsByIdSelector = (id: number) => (state: RootState) =>
+  state.cart.items.find((item) => item.id === id);
 
 export const { addPizza, minusPizza, removePizza, clearPizzas } = cartSlice.actions;
 

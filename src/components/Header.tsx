@@ -1,18 +1,17 @@
-import { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+
+//Redux toolkit
+import { cartSelector } from '../redux/slices/cartSlice';
 
 //Components
 import Search from '../components/Search';
 
-//Types
-import { RootState } from '../redux/store';
-
 //Logo
 import logoSvg from '../assets/img/pizza-logo.svg';
 
-const Header: FC = () => {
-  const { totalPrice, items } = useSelector((state: RootState) => state.cart);
+const Header = () => {
+  const { totalPrice, items } = useSelector(cartSelector);
   const totalCount = items.reduce((sum, item) => sum + item.count, 0);
 
   return (

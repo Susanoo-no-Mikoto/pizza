@@ -13,26 +13,17 @@ interface ISearchContext {
   setSearshValue: (value: string) => void;
 }
 
-export const SearchContext = createContext<ISearchContext>({
-  searshValue: '',
-  setSearshValue: () => '',
-});
-
 function App() {
-  const [searshValue, setSearshValue] = useState<string>('');
-
   return (
     <div className="wrapper">
-      <SearchContext.Provider value={{ searshValue, setSearshValue }}>
-        <Header />
-        <div className="content">
-          <Routes>
-            <Route path="/" element={<Home searshValue={searshValue} />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </div>
-      </SearchContext.Provider>
+      <Header />
+      <div className="content">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
     </div>
   );
 }
