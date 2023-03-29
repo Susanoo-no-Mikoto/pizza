@@ -14,7 +14,6 @@ interface IPizzaBlockProps {
   sizes: number[];
   rating: number;
 }
-
 const PizzaBlock: FC<IPizzaBlockProps> = ({ id, title, imageUrl, price, types, sizes }) => {
   const dispatch = useDispatch();
   const cartItems = useSelector(cartItemsByIdSelector(id));

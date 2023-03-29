@@ -4,7 +4,11 @@ import { useSelector, useDispatch } from 'react-redux';
 //ReduxSlices
 import { filterSelector, setSort } from '../redux/slices/filterSlice';
 
-export const list = [
+interface ISortItem {
+  name: string;
+  sortProperty: string;
+}
+export const list: ISortItem[] = [
   { name: 'популярности ↓', sortProperty: 'rating' },
   { name: 'популярности ↑', sortProperty: '-rating' },
   { name: 'цене ↑', sortProperty: 'price' },
@@ -20,7 +24,8 @@ const Sort = () => {
 
   const [open, setOpen] = useState<boolean>(false);
 
-  const onChangeSort = (obj: object) => {
+  const onChangeSort = (obj: ISortItem) => {
+    setOpen(false);
     dispatch(setSort(obj));
   };
 
@@ -61,7 +66,6 @@ const Sort = () => {
               <li
                 key={obj.name}
                 onClick={() => {
-                  setOpen(false);
                   onChangeSort(obj);
                 }}
                 className={sort.sortProperty === obj.sortProperty ? 'active' : ''}>

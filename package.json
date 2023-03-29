@@ -4,11 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"npm run server\" \"npm run start \" ",
+    "dev": "concurrently \"npm run json-server\" \"npm run start \" ",
     "start": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "server": "json-server -w server/db.json -p 3001"
+    "server": "node server.js",
+    "json-server": "json-server -w public/db.json -p 3001"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.2",

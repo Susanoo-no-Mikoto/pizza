@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 //Redux toolkit
 import { filterSelector, setCurrentPage, setFilters } from '../redux/slices/filterSlice';
 import { fetchPizzas, pizzaSelector } from '../redux/slices/pizzasSlice';
+import { AppDispatch } from '../redux/store';
 
 //Components
 import Categories from '../components/Categories';
@@ -17,7 +18,7 @@ import Pagination from '../components/Pagination';
 
 const Home = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const { categoryId, sort, currentPage, searchValue } = useSelector(filterSelector);
   const { items, status } = useSelector(pizzaSelector);
   const isSearch = useRef<boolean>(false);
